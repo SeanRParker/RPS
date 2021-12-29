@@ -55,9 +55,9 @@ let game = (rounds) => {
   }
 
   if(playerScore === rounds){
-    console.log("You WON! Good Job!");
+    console.log(`You WON after ${roundNum} rounds! Good Job!`);
   } else {
-    console.log("You lose. Better luck next time.");
+    console.log(`You lose. The computer beat you in ${roundNum} rounds. Better luck next time.`);
   }
 }
 
