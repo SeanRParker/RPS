@@ -1,64 +1,72 @@
+let rounds = 2;
 
-let playerPick = (msg = "rock, paper, or scissors") => {
-  let pick = window.prompt(msg).toLowerCase();
+let rock = document.querySelector("#rock");
+rock.addEventListener('click', () => { 
+  playRound(playerPick("rock"), computerPick(), rounds), finishChecker(rounds)
+});
+let paper = document.querySelector("#paper");
+paper.addEventListener("click", () => { 
+  playRound(playerPick("paper"), computerPick(), rounds), finishChecker(rounds)
+});
+let scissors = document.querySelector("#scissors");
+scissors.addEventListener("click", () => { 
+  playRound(playerPick("scissors"), computerPick(), rounds), finishChecker(rounds)
+});
 
-  if (pick === 'rock' || pick === 'paper' || pick === 'scissors') {
+let playerPick = (pick) => {
+    console.log('playerpick:', pick);
     return pick;
-  } else {
-    console.log('not allowed! Pick one!');
-    return playerPick("Try again. Rock, Paper, or Scissors!");
   }
-}
-
-let computerPick = () => {
-  let randomValue = Math.random() * 3;
-  if (randomValue < 1) {
-    return "rock";
-  } else if (randomValue < 2) {
-    return "paper";
-  } else {
-    return "scissors";
+  
+  let computerPick = () => {
+    let randomValue = Math.random() * 3;
+    if (randomValue < 1) {
+      console.log('computer pick: rock')
+      return "rock";
+    } else if (randomValue < 2) {
+      console.log('computer pick: paper')
+      return "paper";
+    } else {
+     console.log('computer pick: scissors') 
+      return "scissors";
+    }
   }
-}
 
-let capitalize = (str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1)
-}
+  let playerScore = 0;
+  let computerScore = 0;
+  let roundNum = 0;
 
-console.log(computerPick());
-
-let playerScore = 0;
-let computerScore = 0;
-let roundNum = 0;
 
 let playRound = (pSel, cSel, rounds) => {
-  if (pSel === "rock" && cSel === "paper" || pSel === "paper" && cSel === "scissors" || pSel === "scissors" && cSel === "rock") {
-      console.log(`You Lose! ${capitalize(cSel)} beats ${pSel}`);
+
+    if(playerScore < rounds && computerScore < rounds) {
+      console.log('playRound');
+    if (pSel === "rock" && cSel === "paper" || pSel === "paper" && cSel === "scissors" || pSel === "scissors" && cSel === "rock") {
       computerScore += 1;
-      console.log(`${playerScore === rounds || computerScore === rounds ? 'FINAL' : 'CURRENT'} SCORE: Computer - ${computerScore} | You - ${playerScore}`);
+      document.querySelector('#result').textContent = `You Lose! ${cSel} beats ${pSel}`;
+        document.querySelector('#score').textContent = `SCORE: You - ${playerScore} | Computer - ${computerScore}`;
+        roundNum += 1;
+    } else if(pSel === cSel) {
+      console.log('tie!')
+      document.querySelector('#result').textContent = "Tie! Play again";
+    } else {
+      playerScore += 1;   
       roundNum += 1;
-  } else if(pSel === cSel) {
-    console.log("Tie! Play again");
-    playRound(playerPick(), computerPick());
-  } else {
-    console.log(`You Win! ${capitalize(pSel)} beats ${cSel}`);
-    playerScore += 1;
-    console.log(`${playerScore === rounds || computerScore === rounds ? 'FINAL' : 'CURRENT'} SCORE: You - ${playerScore} | Computer - ${computerScore}`);   
-    roundNum += 1;
-  }
+      document.querySelector('#score').textContent = `SCORE: You - ${playerScore} | Computer - ${computerScore}`;
+      document.querySelector('#result').textContent = `You Win! ${pSel} beats ${cSel}`;
+    }
+
+    }
 }
 
-let game = (rounds) => {
-
-  while(playerScore < rounds && computerScore < rounds) {
-    playRound(playerPick(), computerPick(), rounds);
-  }
-
-  if(playerScore === rounds){
-    console.log(`You WON after ${roundNum} rounds! Good Job!`);
-  } else {
-    console.log(`You lose. The computer beat you in ${roundNum} rounds. Better luck next time.`);
+let finishChecker = (rounds) => {
+  if (playerScore === rounds) {
+    console.log("END!");
+    document.querySelectorAll("button").forEach(el => el.disabled = true);
+    document.querySelector('#result').textContent = `You WON after ${roundNum} rounds! Good Job!`;
+  } 
+  if(computerScore === rounds) {
+    document.querySelectorAll("button").forEach(el => el.disabled = true);
+    document.querySelector('#result').textContent = `You lose. The computer beat you in ${roundNum} rounds. Better luck next time.`;
   }
 }
-
-game(5);
